@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+  <head>
+    <title>Crossfade</title>
+    <style type="text/css">
+    @import url(https://fonts.googleapis.com/css?family=Roboto:300);
+    
+    .intro{
+padding-left:20px; 
+padding-right:50px;
+line-height:20px;
+     font-family: "Roboto", sans-serif;
+
+}
+
+#Slideshow {
+  opacity: 1.0;              /* CSS3 */
+  -moz-opacity: 1.0;         /* Older versions of Firefox */
+  -khtml-opacity: 1.0;       /* Older versions of Safari */
+  filter: alpha(opacity=100); /* Internet Explorer */
+}
+#Slideshow div {display:none;}
+#Slideshow #slice1 {display:block;}
+    </style>
+  </head>
+
+  <body>
+   <div id="Basement" style="width:100%;margin:auto;">
+    <div id="Slideshow">
+      <div id="slice1">
+      <img style="width:100%"  src="http://i.imgur.com/ZRA6LKY.jpg">
+      </div>
+      <div id="slice2">
+      <img style="width:100%"  src = "http://i.imgur.com/opzUZdx.jpg">
+      </div>
+      <div id="slice3">
+            <img style="width:100%"  src = "http://i.imgur.com/fAUjX9L.jpg">
+      
+      </div>
+
+    </div>
+   </div>
+
+   <script type="text/javascript">
+var element = document.getElementById("Slideshow");
+var duration = 2000; /* fade duration in millisecond */
+var hidtime = 0; /* time to stay hidden */
+var showtime = 1500; /* time to stay visible */
+
+var running = 0 /* Used to check if fade is running */
+var iEcount = 1 /* Element Counter */
+
+var iTotalE = element.getElementsByTagName('div').length;
+
+
+function SetOpa(Opa) {
+  element.style.opacity = Opa;
+  element.style.MozOpacity = Opa;
+  element.style.KhtmlOpacity = Opa;
+  element.style.filter = 'alpha(opacity=' + (Opa * 100) + ');';
+}
+(function StartFade() {
+  if (running != 1) {
+   running = 1
+   fadeOut()
+  }
+})()
+function fadeOut() {
+  for (i = 0; i <= 1; i += 0.01) {
+    setTimeout("SetOpa(" + (1 - i) +")", i * duration);
+  }
+   setTimeout("FadeIn()", (duration + hidtime));
+}
+function FadeIn() {
+  for (i = 0; i <= 1; i += 0.01) {
+    setTimeout("SetOpa(" + i +")", i * duration);
+  }
+   if (iEcount == iTotalE) {
+    iEcount = 1
+    document.getElementById("slice" + iEcount).style.display = "block";
+    document.getElementById("slice" + iTotalE).style.display = "none";
+   } else {
+    document.getElementById("slice" + (iEcount + 1)).style.display = "block";
+    document.getElementById("slice" + iEcount).style.display = "none";
+    iEcount = iEcount+1
+   }
+   setTimeout("fadeOut()", (duration + showtime));
+}
+   </script>
+<div class="intro">
+
+<p class>DBS is a leading financial services group in Asia. We are headquartered in Singapore, with a growing presence in Greater China, Southeast Asia and South Asia.DBS is fully committed to effective governance to protect the interests of all our stakeholders and to promote the long-term sustainability of the Group. DBS is fully committed to effective governance to protect the interests of all our stakeholders and to promote the long-term sustainability of the Group.  </br>
+
+<p></p>
+As a bank born and bred in Asia, we are well-positioned as your partner to capture opportunities across the region. 
+
+
+For us, customer centricity is not just a buzzword. We strive to embody elements of what relationships are about in Asia.
+
+We work in a collaborative manner across geographies, supporting our customers as they expand. <p></p>
+
+DBS is honoured to be recognised as the Bank of the Year, Asia by The Banker, a member of the Financial Times Group, and Best Bank in Asia-Pacific by Global Finance. 
+Our one-bank approach lets us rise above individual country and business line priorities.
+
+ Your belief in DBS inspires us to continuously lead the way and shape the future of banking in Asia. 
+
+</div>  </body>
+
+</html>
