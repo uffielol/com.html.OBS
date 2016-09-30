@@ -1,0 +1,160 @@
+CREATE TABLE user_details(
+
+uID			varchar(50),
+pass		varchar(50),
+init		int(1), 
+name		varchar(50),
+address		varchar(50),
+email		varchar(50),
+telNo		varchar(50),
+lastLogin	varchar(50),
+secQuest	varchar(100),
+secAns		varchar(100),
+PRIMARY KEY (uID)
+
+);
+
+
+INSERT INTO user_details VALUES ('usr00001', 'password', 1, 'Charles Goh', '146 Tampines Ave 5', 'charles@goh.com', '97271730', null, 'Where were you born?', 'recover');
+INSERT INTO user_details VALUES ('usr00002', 'password', 1, 'Holly Woods', '23 Somewhere Out There', 'holly@woods.com', '98287381', null, 'What is your favorite book?', 'recover');
+INSERT INTO user_details VALUES ('usr00003', 'password', 3, 'Uffie Something', '55 Beneath The Stars Above', 'uffie@something.com', '87219243', null, 'When did you graduate High School?', 'recover');
+INSERT INTO user_details VALUES ('usr00004', 'password', 4, 'Wei Yang', '16 Hello World Ave', 'Wei@Yang.com', '94726812', null, 'Who is Carmen Sandiego?', 'recover');
+INSERT INTO user_details VALUES ('usr00005', 'password', 5, 'Leonard Wee', '88 Pasir Ris Drive 5', 'leo@wee.com', '73910091', null, 'Where's Waldo?', 'recover');
+INSERT INTO user_details VALUES ('usr00006', 'password', 6, 'Russel Seah', '23 Somewhere Out There', 'russ@seah.com', '88928001', null, 'How do you touch your toes?', 'recover');
+
+
+CREATE TABLE credit_cards (
+
+uID				varchar(50),
+ccNum			varchar(16),
+ccLimit			double(12,2),
+ccAvailLimit	double(12,2),
+ccToPoints		double(12,2),
+ccPoints		int(10),
+PRIMARY KEY (ccNum),
+FOREIGN KEY (uID) REFERENCES user_details(uID)
+ON DELETE CASCADE
+
+);
+
+INSERT INTO credit_cards VALUES ('usr00001', '5200450066002100', 6400.00,  6400.00, 0.00, 0);
+INSERT INTO credit_cards VALUES ('usr00002', '5200760034002800', 6400.00,  6400.00, 0.00, 0);
+
+CREATE TABLE accounts (
+
+accID		varchar(50),
+uID			varchar(50),
+balance		double(12,2),
+PRIMARY KEY (accID),
+FOREIGN KEY (uID) REFERENCES user_details(uID)
+ON DELETE CASCADE
+
+);
+
+INSERT INTO accounts VALUES ('sav00001', 'usr00001', 0.00);
+INSERT INTO accounts VALUES ('sav00002', 'usr00002', 0.00);
+INSERT INTO accounts VALUES ('sav00003', 'usr00003', 0.00);
+INSERT INTO accounts VALUES ('chk00001', 'usr00004', 0.00);
+INSERT INTO accounts VALUES ('chk00002', 'usr00005', 0.00);
+INSERT INTO accounts VALUES ('chk00003', 'usr00006', 0.00);
+
+CREATE TABLE account_history (
+
+accID			varchar(50),
+uID				varchar(50),
+withdraw		double(12,2),
+deposit			double(12,2),
+transDetails	varchar(50),
+transDate		TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (accID) REFERENCES accounts(accID),
+FOREIGN KEY (uID) REFERENCES user_details(uID)
+ON DELETE CASCADE
+
+);
+
+CREATE TABLE cc_history (
+
+ccNum			varchar(50),
+uID				varchar(50),
+debit			double(12,2),
+credit			double(12,2),
+transDetails	varchar(50),
+transDate		TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (ccNum) REFERENCES credit_cards(ccNum),
+FOREIGN KEY (uID) REFERENCES user_details(uID)
+ON DELETE CASCADE
+
+);
+
+
+CREATE TABLE loans (
+
+loanID		varchar(50),
+uID			varchar(50),
+accID		varchar(50),
+loanAmount	double(12,2),
+minPayment	double(12,2),
+loanPeriod  int(2),
+status		varchar(50),
+appDate		TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY(loanID),
+FOREIGN KEY (accID) REFERENCES accounts(accID),
+FOREIGN KEY (uID) REFERENCES user_details(uID)
+ON DELETE CASCADE
+
+);
+
+insert into loans (loanID, uID, accID, loanAmount, loanPeriod, minPayment, status) values ('carr00001', 'usr00001', 'sav00001', 5000, 6, 100,'Pending');
+insert into loans (loanID, uID, accID, loanAmount, loanPeriod, minPayment, status) values ('cash00001', 'usr00002', 'sav00002', 5000, 12, 100,'Pending');
+insert into loans (loanID, uID, accID, loanAmount, loanPeriod, minPayment, status) values ('comm00001', 'usr00003', 'sav00003', 5000, 12, 100,'Pending');
+insert into loans (loanID, uID, accID, loanAmount, loanPeriod, minPayment, status) values ('pers00001', 'usr00004', 'chk00001', 5000, 24, 100,'Pending');
+insert into loans (loanID, uID, accID, loanAmount, loanPeriod, minPayment, status) values ('prop00001', 'usr00005', 'chk00002', 5000, 12, 100,'Pending');
+insert into loans (loanID, uID, accID, loanAmount, loanPeriod, minPayment, status) values ('prop00002', 'usr00006', 'chk00003', 5000, 6, 100,'Pending');
+
+CREATE TABLE loan_history (
+
+loanID			varchar(50),
+uID				varchar(50),
+transDetails	varchar(50),
+repayment		double(12,2),
+transDate		TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (loanID) REFERENCES loans(loanID),
+FOREIGN KEY (uID) REFERENCES user_details(uID)
+ON DELETE CASCADE
+
+);
+
+CREATE TABLE bills(
+
+uID				varchar(50),
+billOrg			varchar(50),
+amount			double(12,2),
+debitAcc		varchar(50),
+transDate		TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (uID) REFERENCES user_details(uID)
+ON DELETE CASCADE
+
+);
+
+CREATE TABLE applications(
+
+appID			int NOT NULL AUTO_INCREMENT,		
+uID				varchar(50),
+type			varchar(50),
+status			varchar(50),
+notes			varchar(50),
+appDate			TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY(appID),
+FOREIGN KEY (uID) REFERENCES user_details(uID)
+ON DELETE CASCADE
+
+);
+
+INSERT INTO applications (uID, type, status, notes) VALUES ('usr00001', 'DBS Checking Account', 'Pending', 'PROMO$50');
+INSERT INTO applications (uID, type, status, notes) VALUES ('usr00002', 'DBS Black Visa Card', 'Pending', 'CLIMIT$5000');
+INSERT INTO applications (uID, type, status, notes) VALUES ('usr00003', 'DBS Altitude Visa Card', 'Pending', 'CLIMIT$6000');
+INSERT INTO applications (uID, type, status, notes) VALUES ('usr00004', 'DBS Savings Account', 'Pending', 'PROMO$50');
+INSERT INTO applications (uID, type, status, notes) VALUES ('usr00005', 'POSB Everyday MasterCard', 'Pending', 'CLIMIT$7000');
+INSERT INTO applications (uID, type, status, notes) VALUES ('usr00006', 'POSB Safra MasterCards', 'Pending', 'CLIMIT$8000');
+ 
+
